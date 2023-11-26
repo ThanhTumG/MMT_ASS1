@@ -1,49 +1,28 @@
+
 import tkinter as tk
-from tkinter import ttk
-from tkinter.messagebox import showinfo
-
-# create the root window
-root = tk.Tk()
-
-root.title('Listbox')
 
 
-# create a list box
-langs = ('Java', 'C#', 'C', 'C++', 'Python',
-         'Go', 'JavaScript', 'PHP', 'Swift')
+class Test:
+    def __init__(self):
+        self.root = tk.Tk()
+        
+        self.label = tk.Label(self.root, text="Label")
+        self.buttonForget = tk.Button(
+            self.root,
+            text="Click to hide Label",
+            command=lambda: self.label.pack_forget(),
+        )
+        self.buttonRecover = tk.Button(
+            self.root, text="Click to show Label", command=lambda: self.label.pack()
+        )
 
-var = tk.Variable(value=langs)
+        self.buttonForget.pack()
+        self.buttonRecover.pack()
+        self.label.pack(side="bottom")
+        self.root.mainloop()
 
-listbox = tk.Listbox(
-    root,
-    listvariable=var,
-    height=6,
-    selectmode=tk.EXTENDED)
-
-listbox.pack(expand=True, fill=tk.BOTH, side=tk.LEFT)
-
-# link a scrollbar to a list
-scrollbar = ttk.Scrollbar(
-    root,
-    orient=tk.VERTICAL,
-    command=listbox.yview
-)
-
-listbox['yscrollcommand'] = scrollbar.set
-
-scrollbar.pack(side=tk.LEFT, expand=True, fill=tk.Y)
+    def quit(self):
+        self.root.destroy()
 
 
-def items_selected(event):
-    # get selected indices
-    selected_indices = listbox.curselection()
-    # get selected items
-    selected_langs = ",".join([listbox.get(i) for i in selected_indices])
-    msg = f'You selected: {selected_langs}'
-
-    showinfo(title='Information', message=msg)
-
-
-listbox.bind('<<ListboxSelect>>', items_selected)
-
-root.mainloop()
+app = Test()

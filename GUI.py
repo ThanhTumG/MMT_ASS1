@@ -122,6 +122,7 @@ class App:
                                             hover_color="slate gray",
                                              fg_color="light slate gray", font=("Aria",15,"bold"),
                                                 text='FETCH', command=self.Fetch_Input,text_color="white")
+        self.Fetch_Button.pack()
         self.Fetch_Button.place(relx=0.5, rely=0.6, anchor='s')
         
         self.fetchLabel = ctk.CTkLabel(master=self.Right_Sub_Frame,text="Disconnect from current server",font=("Arial",14,),text_color='white')
@@ -169,17 +170,18 @@ class App:
 
 
     def Fetch_Input(self):
-        self.Right_Sub_Frame.pack_forget()
+        # self.Right_Sub_Frame.destroy()
         time.sleep(0.5)
         self.Fetch_Frame()
         
     def Fetch_Frame(self):
         # Fetch frame
-        self.Fetch_Input_Frame = ctk.CTkFrame(master=self.Client_UI_Frame, width=250, height=300, fg_color='black')
-        self.Fetch_Input_Frame.place(relx= 0.576,rely=0.17)
+
+        self.Fetch_Input_Frame = ctk.CTkFrame(master=self.Client_UI_Frame,  fg_color='deepskyblue4')
+        self.Fetch_Input_Frame.place(relx= 0.6,rely=0.13, relwidth=0.3, relheight=0.8)
         # Fetch suggest
-        self.Fetch_Suggest = ctk.CTkLabel(master=self.Fetch_Input_Frame,text="PLEASE TYPE THE " + '\n' +  "NAME OF FILE THAT YOU" + '\n' + "WANT TO FETCH!",font=("Arial",17,"bold"),text_color='white')
-        self.Fetch_Suggest.place(relx = 0.01, rely = 0.1,relwidth = 1)
+        self.Fetch_Suggest = ctk.CTkLabel(master=self.Fetch_Input_Frame,text="PLEASE TYPE THE " + '\n' +  "NAME OF FILE THAT YOU" + '\n' + "WANT TO FETCH!",font=("Arial",13,"bold"),text_color='white')
+        self.Fetch_Suggest.place(relx = 0.5, rely = 0.1, anchor='c')
         # Fetch input
         self.Fetch_File_Entry = ctk.CTkEntry(master=self.Fetch_Input_Frame,
                               placeholder_text='Assignment_1_HK231.pdf',
@@ -190,14 +192,24 @@ class App:
                               fg_color="light slate gray",
                               corner_radius=10)
         self.Fetch_File_Entry.configure(state='normal')
-        self.Fetch_File_Entry.place(relx = 0.1, rely = 0.4)
+        self.Fetch_File_Entry.place(relx = 0.5, rely = 0.3, anchor='c')
         # Fetch button
         self.Fetch_Button = ctk.CTkButton(master=self.Fetch_Input_Frame,
                                             hover_color="slate gray",
                                              fg_color="light slate gray", font=("Aria",13,"bold"),
-                                                text='FINISH', command=self.Fetch_File,text_color="white")
+                                                text='FETCH', command=self.Fetch_File,text_color="white")
         self.Fetch_Button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
+        self.returnButton = ctk.CTkButton(master=self.Fetch_Input_Frame,
+                                            hover_color="slate gray",
+                                             fg_color="light slate gray", font=("Aria",13,"bold"),
+                                                text='Return', command=self.returnToCommand,text_color="white")
+        self.returnButton.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
+    def returnToCommand(self):
+        self.Fetch_Input_Frame.destroy()
+        time.sleep(0.5)
+        # self.Right_Sub_Frame.pack()
+        
     # Handle Publish
     def Add_Local_File(self):
         filepath = filedialog.askopenfilename()

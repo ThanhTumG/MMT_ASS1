@@ -198,11 +198,15 @@ class Client:
                     self.getfile_from_target_peer(target_IP, 6969, fname)
                 else:
                     print('File not found on the server')
+                    return server_message
             else:
                 print(server_message)
+                return server_message
+
         else:
             msg = 'ERROR@File existed in repository.'
             print(msg.split('@')[1])
+            return msg
 
 
     def listening(self):
