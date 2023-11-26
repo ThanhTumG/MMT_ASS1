@@ -108,6 +108,7 @@ class Server:
                         _ = client_socket.recv(SIZE).decode(FORMAT)
                     
                     self.send_message(client_socket, 'DONE', 'All clients are sent.')
+                    self.clientFileList[client_address].append(fileName)
                     print(f'All clients are sent to [{client_address}]')
                 else:
                     self.send_message(client_socket, 'ERROR', 'Filename does not exist on server.')

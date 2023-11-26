@@ -50,7 +50,7 @@ class Client:
             self.client_socket.connect((self.server_IP, self.server_Port))
         except:
             print(f"Failed to connect to server: {self.server_IP}:{self.server_Port}")
-            return
+            return 
         self.isConnected = True
         self.client_socket.send(self.hostname.encode(FORMAT))
         _ = self.client_socket.recv(SIZE).decode(FORMAT)
@@ -196,6 +196,7 @@ class Client:
                     print(server_message, clientList)
                     target_IP = clientList[0].split(':')[0]
                     self.getfile_from_target_peer(target_IP, 6969, fname)
+                    return server_message
                 else:
                     print('File not found on the server')
                     return server_message

@@ -123,20 +123,21 @@ class AppServer():
 
 
         for name in self.server.connectedClient:
-            if name not in self.clientListName:
-            # self.listName.append(name)
-                self.clientListName.append(name)
-                self.tree.insert('', tk.END, text="1", values=(name, self.server.connectedClient[name]))
-                button1 = ctk.CTkButton(self.buttons,corner_radius=2, fg_color="brown2",hover_color="brown3", text = "Ping", height=23, 
-                                        command= lambda: self.ping_hostname(name))
-                button2 = ctk.CTkButton(self.buttons,corner_radius=2, text = "Discover", height=23, 
-                                        command= lambda: self.discover_hostname(name))
-                
-                button1.place(in_=self.ButtonFrame, relx=0.06, y=self.so_far, relwidth=0.42)
-                button2.place(in_=self.ButtonFrame, relx= 0.52, y=self.so_far, relwidth=0.42)
-                self.so_far += 24
+            self.createButton(name)
+
     
-  
+    def createButton(self,name):
+        if name not in self.clientListName:
+            # self.listName.append(name)
+            self.clientListName.append(name)
+            self.tree.insert('', tk.END, text="1", values=(name, self.server.connectedClient[name]))
+            button1 = ctk.CTkButton(self.buttons,corner_radius=2, fg_color="brown2",hover_color="brown3", text = "Ping", height=23, 
+                                        command= lambda: self.ping_hostname(name))
+            button2 = ctk.CTkButton(self.buttons,corner_radius=2, text = "Discover", height=23, 
+                                        command= lambda: self.discover_hostname(name))
+            button1.place(in_=self.ButtonFrame, relx=0.06, y=self.so_far, relwidth=0.42)
+            button2.place(in_=self.ButtonFrame, relx= 0.52, y=self.so_far, relwidth=0.42)
+            self.so_far += 24
     def ping_hostname(self, name):
         # self.repo_list2.delete("all")
         self.repo_list.insert("END",name+ ": "+ self.server.ping(name))
