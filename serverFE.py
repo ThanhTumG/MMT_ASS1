@@ -7,13 +7,12 @@ from tkinter import messagebox
 from CTkListbox import *
 
 SERVER_IP = get_local_ip()
-SERVER_PORT = 4869
+SERVER_PORT = 4004
 
 class AppServer():
-    listName = list()
-    index=0
     clientListName = []
     so_far  = 30
+    tag = "odd"
     def __init__(self):
         # super().__init__()
         self.app = ctk.CTk()
@@ -21,7 +20,6 @@ class AppServer():
         self.UIobject()
         self.tree = self.create_tree_widget()
         self.button = self.create_button()
-       
         self.ButtonFrame = self.createButtonField()
 
 
@@ -32,7 +30,6 @@ class AppServer():
         ctk.set_default_color_theme('blue')
         self.app.title("ServerUI")
         self.app.geometry("900x500")
-        # self.runServer()
         server_thread = threading.Thread(target=self.runServer)
         server_thread.start()
     def runServer(self):
@@ -50,6 +47,10 @@ class AppServer():
                            height=400,
                            fg_color="light slate gray")
         self.mainFrame2.pack(padx=10, pady=10, expand =True, fill="both")
+
+        self.serverIP = tk.Label(master= self.mainFrame2,fg="White", bg="light slate gray",
+                          text="Server IP: " + SERVER_IP,font=("Arial",13,"bold"))
+        self.serverIP.place(relx = 0.05, rely = 0.08, anchor="sw")
 
         self.tableFrame = ctk.CTkFrame(master=self.mainFrame2,corner_radius=0, fg_color="cadetblue4")
         self.tableFrame.place(relx=0.05, rely=0.1, relheight=0.8,relwidth=0.4, )
@@ -77,13 +78,15 @@ class AppServer():
         self.repoTitle2.place(relx = 0.5, rely = 0.4, anchor="n", relheight=0.1)
         self.font3 = ('Arial',10,'bold')
         self.repo_list2 = CTkListbox(master=self.repoFrame, font=self.font3, 
-                                    fg_color='white',border_color="#37d3ff",border_width=3, text_color="black", hover_color="SkyBlue3", select_color= "SkyBlue",
-                                    )    
+                                    fg_color='white',border_color="#37d3ff",border_width=3, text_color="black", 
+                                    hover_color="SkyBlue3", select_color= "SkyBlue",)    
         self.repo_list2.place(relwidth= 0.9, relx=0.5,rely=0.51, relheight= 0.4, anchor="n")
 
     def create_button(self):
-        self.updateButton = ctk.CTkButton(master=self.updateFrame,width=100,corner_radius=8, text='Update table',bg_color='honeydew1', command=self.tableUpdate)
-        self.updateButton.place(relx=0.1, rely=0.8,relheight=0.5,  anchor='sw')
+        self.updateButton = ctk.CTkButton(master=self.updateFrame,width=100,corner_radius=8, text='Refresh', 
+                                          border_width=2, border_color = "deepskyblue1",
+                                          bg_color='honeydew1', command=self.tableUpdate)
+        self.updateButton.place(relx=0.1, rely=0.5,relheight=0.5,  anchor='w')
 
     def createButtonField(self):
         self.buttons = ctk.CTkFrame(master =self.mainFrame2, width=100, fg_color="ghost white",border_color="cadetblue4",border_width=2, corner_radius=0)
@@ -108,10 +111,11 @@ class AppServer():
         tree.heading("# 1", text="Client Name")
         tree.column("# 2", anchor=ctk.CENTER)
         tree.heading("# 2", text="Client IP")
+        
 
 
-        tree.tag_configure('odd', background='#E8E8E8')
-        tree.tag_configure('even', background='#DFDFDF')
+        tree.tag_configure('odd', background='white')
+        tree.tag_configure('even', background='lightblue2')
         tree.place(x=0, y=0, relheight=0.9,relwidth=1)
 
         return tree
@@ -119,18 +123,15 @@ class AppServer():
     def tableUpdate(self):
         self.repo_list.delete("all")
         self.repo_list2.delete("all")
-
-
-
         for name in self.server.connectedClient:
             self.createButton(name)
 
     
     def createButton(self,name):
         if name not in self.clientListName:
-            # self.listName.append(name)
             self.clientListName.append(name)
-            self.tree.insert('', tk.END, text="1", values=(name, self.server.connectedClient[name]))
+            self.tree.insert('', tk.END, text="1", values=(name, self.server.connectedClient[name]), tags=self.tag)
+            self.tag = "even" if self.tag == "odd" else "odd"
             button1 = ctk.CTkButton(self.buttons,corner_radius=2, fg_color="brown2",hover_color="brown3", text = "Ping", height=23, 
                                         command= lambda: self.ping_hostname(name))
             button2 = ctk.CTkButton(self.buttons,corner_radius=2, text = "Discover", height=23, 

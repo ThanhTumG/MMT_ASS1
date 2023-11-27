@@ -14,7 +14,7 @@ def get_local_ip():
     return IP
  
 SERVER_IP = get_local_ip()
-SERVER_PORT = 4869
+SERVER_PORT = 4004
 #SERVER_IP = sk.gethostbyname(sk.gethostname())
 
 SIZE = 1024

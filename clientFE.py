@@ -37,8 +37,9 @@ class App:
         self.Server_IP = ctk.CTkLabel(master=self.Connect_Frame,text="SERVER_IP",font=("Arial",15,"bold"),text_color='white')
         self.Server_IP.place(relx = 0.3, rely = 0.3)
         self.Server_IP_Entry = ctk.CTkEntry(master=self.Connect_Frame,
-                              placeholder_text='192.168.0.1',
-                              placeholder_text_color= "white",
+                              placeholder_text='Enter serverIP',
+                              placeholder_text_color= "gray69",
+                              
                               width=200,
                               height=30,
                               fg_color="light slate gray",
@@ -51,8 +52,8 @@ class App:
         self.HostName = ctk.CTkLabel(master=self.Connect_Frame,text="HOSTNAME",font=("Arial",15,"bold"),text_color='white')
         self.HostName.place(relx = 0.3, rely = 0.4)
         self.Hostname_Entry = ctk.CTkEntry(master=self.Connect_Frame,
-                              placeholder_text='YourName',
-                              placeholder_text_color="white",
+                              placeholder_text='Enter your hostname',
+                              placeholder_text_color="gray69",
                               width=200,
                               height=30,
                               text_color='white',
@@ -64,14 +65,14 @@ class App:
         #Add Button
         self.Connect_Button = ctk.CTkButton(master=self.app,
                                             hover_color="slate gray",
-                                             fg_color="light slate gray", font=("Aria",15,"bold"),
+                                             fg_color="light slate gray", font=("Aria",15,"bold"),bg_color='dark slate gray',
                                                 text='Connect', command=self.Connect_To_Server,text_color="white")
         self.Connect_Button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
         self.client = Client('',0,'')
     def Connect_To_Server(self):
         SERVER_IP = self.Server_IP_Entry.get()
-        SERVER_PORT = 4869
+        SERVER_PORT = 4004
         hostname = self.Hostname_Entry.get()
         if not SERVER_IP or not hostname:
             # Handle empty fields
