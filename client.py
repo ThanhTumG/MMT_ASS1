@@ -49,15 +49,14 @@ class Client:
         try:
             self.client_socket.connect((self.server_IP, self.server_Port))
         except:
-            print(f"Failed to connect to server: {self.server_IP}:{self.server_Port}")
-            return 
+            return False
         self.isConnected = True
         self.client_socket.send(self.hostname.encode(FORMAT))
         _ = self.client_socket.recv(SIZE).decode(FORMAT)
         print(f"Connected to server: {self.server_IP}:{self.server_Port}")
         self.publish_all()
-        self.request_thread = threading.Thread(target=self.start_request)
-        self.request_thread.start()
+        # self.request_thread = threading.Thread(target=self.start_request)
+        # self.request_thread.start()
         time.sleep(0.2)
 
         # Listen to other peers
@@ -83,8 +82,6 @@ class Client:
         self.peer_socket.send(request.encode(FORMAT))
 
 
-        #data = self.peer_socket.recv(SIZE)
-        
         filePath = os.path.join(os.getcwd(), REPOSITORY_PATH)
         filePath += fileName
         file = open(filePath, 'wb')
@@ -100,37 +97,36 @@ class Client:
 
 
     ##### Start send request #####
-    def start_request(self):
-        while self.isConnected:
-            self.choosing_option()
+    # def start_request(self):
+    #     while self.isConnected:
+    #         self.choosing_option()
 
 
     ##### Client choose option #####
-    def choosing_option(self):
+    # def choosing_option(self):
 
-        print('Enter your command:\n> publish `lname` `fname`: Add a file named `fname` from `lname` to repository and convey to the server\n> fetch `fname`: Find some copy of the file named `fname` and add it to repository\n> quit: Disconnect from server')
+    #     print('Enter your command:\n> publish `lname` `fname`: Add a file named `fname` from `lname` to repository and convey to the server\n> fetch `fname`: Find some copy of the file named `fname` and add it to repository\n> quit: Disconnect from server')
         
-        option = input('Your command: ')
-        if option.startswith('publish'):
-            lname = option.split(' ')[1]
-            fname = option.split(' ')[2]
-            self.publish(lname, fname)
-        elif option.startswith('fetch'):
-            fname = option.split(' ')[1]
-            self.fetch(fname)
-        elif option == 'quit':
-            self.disconnect(self.client_socket, self.server_IP, self.server_Port)
-            self.isConnected = False
-            self.client_server.close()
-            exit(0)
-        else:
-            print('Invalid Command')
+    #     option = input('Your command: ')
+    #     if option.startswith('publish'):
+    #         lname = option.split(' ')[1]
+    #         fname = option.split(' ')[2]
+    #         self.publish(lname, fname)
+    #     elif option.startswith('fetch'):
+    #         fname = option.split(' ')[1]
+    #         self.fetch(fname)
+    #     elif option == 'quit':
+    #         self.disconnect(self.client_socket, self.server_IP, self.server_Port)
+    #         self.isConnected = False
+    #         self.client_server.close()
+    #         exit(0)
+    #     else:
+    #         print('Invalid Command')
 
-    def quitCli(self):
+    def quitServer(self):
         self.disconnect(self.client_socket, self.server_IP, self.server_Port)
         self.isConnected = False
         self.client_server.close()
-        # exit(0)
     ####### Disconnect from server ########
     def disconnect(self, my_socket = sk.socket, other_IP = '127.0.0.1', other_Port = 4004):
 
@@ -198,15 +194,14 @@ class Client:
                     self.getfile_from_target_peer(target_IP, 4080, fname)
                     return server_message
                 else:
-                    print('File not found on the server')
+                    # print('File not found on the server')
                     return server_message
             else:
-                print(server_message)
+                # print(server_message)
                 return server_message
 
         else:
-            msg = 'ERROR@File existed in repository.'
-            print(msg.split('@')[1])
+            msg = 'File existed in repository.'
             return msg
 
 
@@ -223,8 +218,6 @@ class Client:
                 request = other_socket.recv(SIZE).decode(FORMAT)
             except:
                 print('Waiting for request...')
-
-            #request = other_socket.recv(SIZE).decode(FORMAT)
             fileName = request.split('@')[1]
             self.transfer_file(other_socket, other_address[0], fileName)
         except:

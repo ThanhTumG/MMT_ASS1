@@ -112,8 +112,6 @@ class AppServer():
         tree.column("# 2", anchor=ctk.CENTER)
         tree.heading("# 2", text="Client IP")
         
-
-
         tree.tag_configure('odd', background='white')
         tree.tag_configure('even', background='lightblue2')
         tree.place(x=0, y=0, relheight=0.9,relwidth=1)

@@ -15,7 +15,6 @@ def get_local_ip():
  
 SERVER_IP = get_local_ip()
 SERVER_PORT = 4004
-#SERVER_IP = sk.gethostbyname(sk.gethostname())
 
 SIZE = 1024
 FORMAT = 'utf-8'
@@ -34,7 +33,7 @@ class Server:
     def start(self):
         print(f"Server is listening on {self.server_ip}:{self.server_port}")
         while True:
-            threading.Thread(target=self.start_request).start()
+            # threading.Thread(target=self.start_request).start()
             
             client_socket, client_address = self.server.accept()
             client_name = client_socket.recv(SIZE).decode(FORMAT)
@@ -47,18 +46,16 @@ class Server:
             time.sleep(1)
             
 
-    def start_request(self):
-        while True:
-            self.server_option()
-
-
-    def server_option(self):
-        print('\nEnter your command:\n> discover `hostname`: discover the list of local files of hostname\n> ping `hostname`: live check hostname')
-        option = input('\nYour command: ')
-        if option.startswith('discover'):
-            print(self.discover(option.split(' ')[1]))
-        elif option.startswith('ping'):
-            print(self.ping(option.split(' ')[1]))
+    # def start_request(self):
+    #     while True:
+    #         self.server_option()
+    # def server_option(self):
+    #     print('\nEnter your command:\n> discover `hostname`: discover the list of local files of hostname\n> ping `hostname`: live check hostname')
+    #     option = input('\nYour command: ')
+    #     if option.startswith('discover'):
+    #         print(self.discover(option.split(' ')[1]))
+    #     elif option.startswith('ping'):
+    #         print(self.ping(option.split(' ')[1]))
 
 
     def handle_client(self, client_socket, client_address, client_name):

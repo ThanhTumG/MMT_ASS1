@@ -32,11 +32,15 @@ class App:
         # Add title
         self.App_Title = ctk.CTkLabel(master=self.Connect_Frame,text="FILE-SHARING APPLICATION",font=("Arial",20,"bold"),text_color='white')
         self.App_Title.place(relx = 0.5, rely = 0.1, anchor = "center")
+        
+        self.logInFrame = ctk.CTkFrame(master=self.Connect_Frame, border_width=4, border_color="white",
+                           fg_color='dark slate gray')
+        self.logInFrame.place(relx = 0.5, rely = 0.5, relwidth =0.5, anchor = "center")
 
         # Add Server_IP
-        self.Server_IP = ctk.CTkLabel(master=self.Connect_Frame,text="SERVER_IP",font=("Arial",15,"bold"),text_color='white')
-        self.Server_IP.place(relx = 0.3, rely = 0.3)
-        self.Server_IP_Entry = ctk.CTkEntry(master=self.Connect_Frame,
+        self.Server_IP = ctk.CTkLabel(master=self.logInFrame,text="SERVER_IP",font=("Arial",15,"bold"),text_color='white')
+        self.Server_IP.place(relx = 0.3, rely = 0.2, anchor ='e', relwidth=0.25)
+        self.Server_IP_Entry = ctk.CTkEntry(master=self.logInFrame,
                               placeholder_text='Enter serverIP',
                               placeholder_text_color= "gray69",
                               
@@ -46,12 +50,12 @@ class App:
                               text_color='white',
                               corner_radius=10)
         self.Server_IP_Entry.configure(state='normal')
-        self.Server_IP_Entry.place(relx = 0.45, rely = 0.3)
+        self.Server_IP_Entry.place(relx = 0.32, rely = 0.2,  anchor ='w',  relwidth=0.6)
 
         #Add HostName
-        self.HostName = ctk.CTkLabel(master=self.Connect_Frame,text="HOSTNAME",font=("Arial",15,"bold"),text_color='white')
-        self.HostName.place(relx = 0.3, rely = 0.4)
-        self.Hostname_Entry = ctk.CTkEntry(master=self.Connect_Frame,
+        self.HostName = ctk.CTkLabel(master=self.logInFrame,text="HOSTNAME",font=("Arial",15,"bold"),text_color='white')
+        self.HostName.place(relx = 0.3, rely = 0.4, anchor ='e', relwidth=0.25)
+        self.Hostname_Entry = ctk.CTkEntry(master=self.logInFrame,
                               placeholder_text='Enter your hostname',
                               placeholder_text_color="gray69",
                               width=200,
@@ -60,14 +64,14 @@ class App:
                               fg_color="light slate gray",
                               corner_radius=10)
         self.Hostname_Entry.configure(state='normal')
-        self.Hostname_Entry.place(relx = 0.45, rely = 0.4)
+        self.Hostname_Entry.place(relx = 0.32, rely = 0.4,  anchor ='w',  relwidth=0.6)
 
         #Add Button
-        self.Connect_Button = ctk.CTkButton(master=self.app,
-                                            hover_color="slate gray",
-                                             fg_color="light slate gray", font=("Aria",15,"bold"),bg_color='dark slate gray',
-                                                text='Connect', command=self.Connect_To_Server,text_color="white")
-        self.Connect_Button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
+        self.Connect_Button = ctk.CTkButton(master=self.logInFrame,
+                                            hover_color="royalblue4",
+                                             fg_color="royalblue2", font=("Aria",15,"bold"),bg_color='dark slate gray', 
+                                                text='Connect', command=self.Connect_To_Server,text_color="white",)
+        self.Connect_Button.place(relx=0.5, rely=0.8, anchor='c')
 
         self.client = Client('',0,'')
     def Connect_To_Server(self):
@@ -75,11 +79,11 @@ class App:
         SERVER_PORT = 4004
         hostname = self.Hostname_Entry.get()
         if not SERVER_IP or not hostname:
-            # Handle empty fields
-            print("Please enter both Server IP and Hostname.")
+            messagebox.showerror(title='Error', message="Please enter both Server IP and Hostname.")
             return
         self.client = Client(SERVER_IP, SERVER_PORT, hostname)
         if(self.client.start() == False):
+            messagebox.showerror(title='Error', message="Failed to connect to server: " + SERVER_IP + ":" + str(SERVER_PORT))
             return
         time.sleep(0.5)
         
@@ -88,6 +92,8 @@ class App:
 
         self.Client_UI()
     def Client_UI(self):
+        SERVER_IP = self.Server_IP_Entry.get()
+
         # Build a frame
         self.Client_UI_Frame = ctk.CTkFrame(master=self.app, width=800, height=500, fg_color='darkslategray4')
         self.Client_UI_Frame.place(relwidth=0.95, relheight=0.95, relx= 0.5,rely=0.5, anchor = "center")
@@ -95,14 +101,15 @@ class App:
         # Add title 
         self.App_Title = ctk.CTkLabel(master=self.Client_UI_Frame,text="FILE-SHARING APPLICATION",font=("Arial",20,"bold"),text_color='white')
         self.App_Title.place(relx = 0.5, rely = 0.1, anchor = "s")
-
+        self.serverIP = ctk.CTkLabel(master=self.Client_UI_Frame,text="Connect to server: " + SERVER_IP,font=("Arial",13,"bold"),text_color='white')
+        self.serverIP.place(relx = 0.1, rely = 0.9, anchor = "nw")
         # Build Sub frame
 
         self.Left_Sub_Frame = ctk.CTkFrame(master=self.Client_UI_Frame, fg_color='deepskyblue4')
-        self.Left_Sub_Frame.place(relx= 0.1,rely=0.13, relwidth=0.45, relheight=0.8)
+        self.Left_Sub_Frame.place(relx= 0.1,rely=0.13, relwidth=0.45, relheight=0.75)
 
         self.Right_Sub_Frame = ctk.CTkFrame(master=self.Client_UI_Frame,  fg_color='deepskyblue4')
-        self.Right_Sub_Frame.place(relx= 0.6,rely=0.13, relwidth=0.3, relheight=0.8)
+        self.Right_Sub_Frame.place(relx= 0.6,rely=0.13, relwidth=0.3, relheight=0.75)
 
         # Add suggest
         self.commandLabel = ctk.CTkLabel(master=self.Right_Sub_Frame,text="COMMAND",font=("Arial",17,"bold"),text_color='white')
@@ -239,8 +246,8 @@ class App:
                 messagebox.showerror("Error",msg)
     # Hanlde Quit
     def Disconnect_From_Server(self):
-        # self.app.withdraw()
-        self.client.quitCli()
+        self.client.quitServer()
+        self.client =  Client('',0,'') 
         self.Connect()
 if __name__ == '__main__':
     app = App()
